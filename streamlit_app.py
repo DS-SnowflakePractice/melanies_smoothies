@@ -39,7 +39,7 @@ if ingredients_list:
 
 
 
-mport requests  
+import requests  
 smoothiefroot_response = requests.get(
     "https://my.smoothiefroot.com/api/fruit/watermelon"
 )  
