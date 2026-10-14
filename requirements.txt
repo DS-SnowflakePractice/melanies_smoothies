@@ -1,3 +1,8 @@
-# requirements
-snowflake-snowpark-python
-streamlit
+[connections.snowflake]
+account = "WDPNDZT-WRB36031"
+user = "mellymel"
+password = "@Denise2DenizLOve"
+warehouse = "COMPUTE_WH"
+database = "SMOOTHIES"
+schema = "PUBLIC"
+role = "SYSADMIN"
