@@ -6,7 +6,7 @@ from snowflake.snowpark.functions import col
 
 
 cnx = st.connection("snowflake")
-session = get_active_sessioon()
+session = get_active_session()
 
 
 
