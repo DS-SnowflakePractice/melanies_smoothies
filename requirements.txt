@@ -1,6 +1,6 @@
 [connections.snowflake]
 account = "WDPNDZT-WRB36031"
-user = "mellymel"
+user = "digitalsteve"
 password = "@Denise2DenizLOve"
 warehouse = "COMPUTE_WH"
 database = "SMOOTHIES"
