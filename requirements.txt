@@ -1,7 +1,7 @@
 [connections.snowflake]
 account = "WDPNDZT"
 user = "digitalsteve"
-password = "@Denise2DenizLOve"
+password = "@Denise2DenizLove"
 warehouse = "COMPUTE_WH"
 database = "SMOOTHIES"
 schema = "PUBLIC"
