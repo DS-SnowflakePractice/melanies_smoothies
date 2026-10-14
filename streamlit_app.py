@@ -89,8 +89,8 @@ if ingredients_list:
         my_insert_stmt = f"""
         INSERT INTO SMOOTHIES.PUBLIC.ORDERS
         (INGREDIENTS, NAME_ON_ORDER)
-        VALUES
-        ('{ingredients_string.strip()}', '{name_on_order}')
+       VALUES
+            ('{ingredients_string}', '{name_on_order}')
         """
 
         session.sql(my_insert_stmt).collect()
