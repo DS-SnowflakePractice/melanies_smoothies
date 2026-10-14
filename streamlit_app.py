@@ -5,17 +5,23 @@ import pandas as pd
 
 from snowflake.snowpark.functions import col
 
-# Create Snowflake session
+# Create Snowflake Session
 cnx = st.connection("snowflake")
 session = cnx.session()
 
-# Page Title
+# Page title
 st.title(":cup_with_straw: Customize Your Smoothie! :cup_with_straw:")
 
-# Customer Name
+st.write(
+    """Choose the fruits you want in your custom Smoothie!"""
+)
+
+# Customer name
 name_on_order = st.text_input("Name on Smoothie:")
 
-# Get fruit options from Snowflake
+st.write("The name on your Smoothie will be:", name_on_order)
+
+# Fruit list from Snowflake
 fruit_df = (
     session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
     .select(col("FRUIT_NAME"))
@@ -23,37 +29,35 @@ fruit_df = (
 
 fruit_list = [row["FRUIT_NAME"] for row in fruit_df.collect()]
 
-# Fruit Selection
+# Fruit selector
 ingredients_list = st.multiselect(
     "Choose up to 5 ingredients:",
     fruit_list,
     max_selections=5
 )
 
-# Show nutritional information
+# Display API data
 if ingredients_list:
 
-    st.subheader("Fruit Nutrition Information")
+    fruit_choice = ingredients_list[0]
 
-    for fruit_chosen in ingredients_list:
+    smoothiefroot_response = requests.get(
+        f"https://my.smoothiefroot.com/api/fruit/{fruit_choice.lower()}"
+    )
 
-        smoothiefroot_response = requests.get(
-            f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen}"
+    if smoothiefroot_response.status_code == 200:
+
+        sf_df = pd.json_normalize(
+            smoothiefroot_response.json()
         )
 
-        if smoothiefroot_response.status_code == 200:
+        st.dataframe(
+            sf_df,
+            use_container_width=True
+        )
 
-            fruit_data = pd.json_normalize(
-                smoothiefroot_response.json()
-            )
-
-            st.dataframe(
-                fruit_data,
-                use_container_width=True
-            )
-
-# Order Submission
-if ingredients_list and name_on_order:
+# Submit order
+if ingredients_list and st.button("Submit Order"):
 
     ingredients_string = ", ".join(ingredients_list)
 
@@ -64,11 +68,6 @@ if ingredients_list and name_on_order:
     ('{ingredients_string}', '{name_on_order}')
     """
 
-    if st.button("Submit Order"):
+    session.sql(my_insert_stmt).collect()
 
-        session.sql(my_insert_stmt).collect()
-
-        st.success(
-            f"Your smoothie for {name_on_order} has been ordered!",
-            icon="✅"
-        )
+    st.success("Your Smoothie is ordered!", icon="✅")
